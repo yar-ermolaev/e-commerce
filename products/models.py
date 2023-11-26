@@ -15,6 +15,13 @@ class Product(models.Model):
         return self.name
 
 
+class ProductImage(models.Model):
+    image_path = models.CharField(max_length=255, unique=True,
+                                  verbose_name='Расположение')
+    product = models.ForeignKey('Product', on_delete=models.CASCADE,
+                                related_name='images', verbose_name='Продукт')
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True,
                             verbose_name='Название')
