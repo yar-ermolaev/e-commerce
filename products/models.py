@@ -13,6 +13,7 @@ class Product(models.Model):
                                 verbose_name='Цена')
     properties = models.JSONField(blank=True, verbose_name='Характеристики')
     description = models.TextField(verbose_name='Описание')
+    image_paths = models.JSONField(blank=True, verbose_name='Список изображений')
     category = models.ForeignKey('Category', on_delete=models.PROTECT)
 
     def __str__(self):
