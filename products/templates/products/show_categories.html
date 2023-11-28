@@ -18,7 +18,7 @@
     <ul class="list-group mt-3">
         {% for category in categories %}
             <li class="list-group-item">
-                {{ category.name }}
+                <a href="{% url 'category_detail' category.slug %}">{{ category.name }}</a>
             </li>
         {% endfor %}
     </ul>
