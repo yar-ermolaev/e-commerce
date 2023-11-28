@@ -16,7 +16,13 @@
     <h1>{{ product.name }}</h1>
 
     <!-- Карусель изображений -->
+
     <div id="imageCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for image in product.image_paths %}
+                <li data-target="#imageCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+            {% endfor %}
+        </ol>
         <div class="carousel-inner">
             {% for image in product.image_paths %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -32,18 +38,13 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
+    </div>
 
-<!--        <ol class="carousel-indicators carousel-indicators-dark">-->
-<!--            {% for image_path in product.image_paths %}-->
-<!--                <li data-target="#imageCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>-->
-<!--            {% endfor %}-->
-<!--        </ol>-->
 
 <!--        <div class="d-flex justify-content-between mt-2">-->
 <!--            <button class="btn btn-dark" href="#imageCarousel" role="button" data-slide="prev">Previous</button>-->
 <!--            <button class="btn btn-dark" href="#imageCarousel" role="button" data-slide="next">Next</button>-->
 <!--        </div>-->
-    </div>
 
     <!-- Информация о товаре -->
     <div class="mt-4">
@@ -57,7 +58,7 @@
         <p>{{ product.manufacturer }}</p>
 
         <h4>Description</h4>
-        <p>{{ product.description }}</p>
+        <p>{{ product.description|linebreaks }}</p>
     </div>
 </div>
 
