@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Категория - {{ category.name }}</title>
+    <!-- Подключение Bootstrap (CSS) -->
+    {% load static %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Категория - {{ category.name }}</h1>
+
+    <!-- Список последних 10 товаров в категории -->
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-9 mb-4">
+                <div class="card">
+                    <!-- Небольшая первая картинка из списка image_paths -->
+                    {% with image=product.image_paths.0 %}
+                        {% if image %}
+                            <a href="{% url 'product_detail' category.slug product.slug %}">
+                                <img src="/media/{{ image }}" class="card-img-top w-50 mx-auto" alt="{{ product.name }}">
+                            </a>
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="card-body">
+                        <!-- Название товара с ссылкой на детали товара -->
+                        <h5 class="card-title"><a href="{% url 'product_detail' category.slug product.slug %}">{{ product.name }}</a></h5>
+
+                        <!-- Характеристики и краткое описание -->
+                        <div class="card-text">
+                            <!-- Замените нижеследующие поля на актуальные поля вашей модели Product -->
+                            <p>Характеристики: {{ product.properties }}</p>
+                            <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Цена и кнопка "В корзину" -->
+                    <div class="card-footer">
+                        <p class="card-text">Цена: {{ product.price }} руб.</p>
+                        <a href="#" class="btn btn-primary">В корзину</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Подключение Bootstrap (JS и Popper.js) и jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
