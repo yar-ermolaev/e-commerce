@@ -14,7 +14,8 @@ class Product(models.Model):
     properties = models.JSONField(blank=True, verbose_name='Характеристики')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     image_paths = models.JSONField(blank=True, verbose_name='Список изображений')
-    category = models.ForeignKey('Category', on_delete=models.PROTECT)
+    category = models.ForeignKey('Category', on_delete=models.PROTECT,
+                                 related_name='products')
 
     def __str__(self):
         return self.name
@@ -30,6 +31,8 @@ class ProductImage(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True,
                             verbose_name='Название')
+    slug = models.SlugField(max_length=100, unique=True,
+                            verbose_name='URL')
 
     def __str__(self):
         return self.name
