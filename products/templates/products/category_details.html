@@ -14,29 +14,32 @@
 <div class="container mt-5">
     <h1>Категория - {{ category.name }}</h1>
 
-    <!-- Список последних 10 товаров в категории -->
+    <!-- Список 10 товаров в категории -->
     <div class="row">
         {% for product in products %}
-            <div class="col-md-9 mb-4">
+            <div class="col-md-12 mb-4">
                 <div class="card">
-                    <!-- Небольшая первая картинка из списка image_paths -->
-                    {% with image=product.image_paths.0 %}
-                        {% if image %}
-                            <a href="{% url 'product_detail' category.slug product.slug %}">
-                                <img src="/media/{{ image }}" class="card-img-top w-50 mx-auto" alt="{{ product.name }}">
-                            </a>
-                        {% endif %}
-                    {% endwith %}
+                    <div class="row no-gutters">
+                        <!-- Первая картинка из списка image_paths -->
+                        {% with image=product.image_paths.0 %}
+                            {% if image %}
+                                <a href="{% url 'product_detail' category.slug product.slug %}">
+                                    <img src="/media/{{ image }}" class="card-img-top w-50 mx-auto" alt="{{ product.name }}">
+                                </a>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
 
-                    <div class="card-body">
-                        <!-- Название товара с ссылкой на детали товара -->
-                        <h5 class="card-title"><a href="{% url 'product_detail' category.slug product.slug %}">{{ product.name }}</a></h5>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <!-- Название товара с ссылкой на детали товара -->
+                            <h5 class="card-title"><a href="{% url 'product_detail' category.slug product.slug %}">{{ product.name }}</a></h5>
 
-                        <!-- Характеристики и краткое описание -->
-                        <div class="card-text">
-                            <!-- Замените нижеследующие поля на актуальные поля вашей модели Product -->
-                            <p>Характеристики: {{ product.properties }}</p>
-                            <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                            <!-- Характеристики и краткое описание -->
+                            <div class="card-text">
+                                <p>Характеристики: {{ product.properties }}</p>
+                                <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                            </div>
                         </div>
                     </div>
 
