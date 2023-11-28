@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from django.views.generic import DetailView
-from .models import Product
+from django.views.generic import DetailView, ListView
+from .models import Product, Category
 
 
 class ProductView(DetailView):
@@ -11,8 +11,9 @@ class ProductView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     paths = context.get('product').image_paths
-    #     context['image_paths'] = [str(Path('media/', file_path)) for file_path in paths]
-    #     return context
+
+class CategoryList(ListView):
+    model = Category
+    template_name = 'products/show_categories.html'
+    context_object_name = 'categories'
+
