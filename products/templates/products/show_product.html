@@ -57,6 +57,13 @@
         <h4>Производитель</h4>
         <p>{{ product.manufacturer }}</p>
 
+        <h4>Характеристики</h4>
+        <ul>
+            {% for key, value in product.properties.items %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+
         <h4>Описание</h4>
         <p>{{ product.description|linebreaks }}</p>
     </div>

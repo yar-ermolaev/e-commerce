@@ -37,7 +37,12 @@
 
                             <!-- Характеристики и краткое описание -->
                             <div class="card-text">
-                                <p>Характеристики: {{ product.properties }}</p>
+                                <p>Характеристики:</p>
+                                <ul>
+                                    {% for key, value in product.properties.items %}
+                                        <li><strong>{{ key }}:</strong> {{ value }}</li>
+                                    {% endfor %}
+                                </ul>
                                 <p>Описание: {{ product.description|truncatewords:20 }}</p>
                             </div>
                         </div>
