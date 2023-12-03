@@ -21,3 +21,6 @@
     filter: invert(100%); /* Инвертирование цвета иконок */
 }
 
+.card-img-top {
+  text-align: center;
+}
