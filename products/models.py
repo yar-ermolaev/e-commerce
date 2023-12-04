@@ -17,6 +17,9 @@ class Product(models.Model):
     category = models.ForeignKey('Category', on_delete=models.PROTECT,
                                  related_name='products')
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return self.name
 
