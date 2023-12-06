@@ -1,7 +1,9 @@
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
-from .forms import LoginForm
+from django.views.generic import CreateView
+
+from .forms import LoginForm, RegistrationForm
 
 
 class LoginUser(LoginView):
@@ -11,3 +13,10 @@ class LoginUser(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('index')
+
+
+class RegistrationView(CreateView):
+    template_name = 'users/registration.html'
+    form_class = RegistrationForm
+    success_url = reverse_lazy('users:login')
+    extra_context = {'title': 'Регистрация'}
