@@ -34,7 +34,7 @@
               </li>
               {% if user.is_authenticated %}
                 <li class="nav-item">
-                  <a class="nav-link" aria-current="page" href="#">Профиль</a>
+                  <a class="nav-link" aria-current="page" href="{% url 'users:profile' %}">Профиль</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" aria-current="page" href="{% url 'users:logout' %}">Выйти</a>

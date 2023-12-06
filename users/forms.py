@@ -22,3 +22,11 @@ class RegistrationForm(UserCreationForm):
         fields = ['username', 'email', 'first_name',
                   'last_name', 'password1', 'password2']
         labels = {'email': 'Email', 'first_name': 'Имя', 'last_name': 'Фамилия'}
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'first_name', 'last_name']
+        labels = {'username': 'Логин', 'email': 'Email',
+                  'first_name': 'Имя', 'last_name': 'Фамилия'}
