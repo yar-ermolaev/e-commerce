@@ -7,43 +7,40 @@
     <!-- Список 10 товаров в категории -->
     <div class="row">
         {% for product in products %}
-            <div class="col-md-12 mb-4">
-                <div class="card">
-                    <div class="row no-gutters">
-                        <!-- Первая картинка из списка image_paths -->
-                        {% with image=product.image_paths.0 %}
-                            {% if image %}
-                                <a href="{% url 'product_detail' product.category.slug product.slug %}">
-                                    <img src="/media/{{ image }}" class="card-img-top w-50" alt="{{ product.name }}">
-                                </a>
-                            {% endif %}
-                        {% endwith %}
-                    </div>
+            <div class="card mb-4 p-2">
+                <div class="row">
+                  <div class="col-lg-4 prod-image">
+                      {% with image=product.image_paths.0 %}
+                          {% if image %}
+                              <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                                  <img src="/media/{{ image }}" class="card-img-top w-80" alt="{{ product.name }}">
+                              </a>
+                          {% endif %}
+                      {% endwith %}
+                  </div>
 
-                    <div class="col-md-10">
-                        <div class="card-body">
-                            <!-- Название товара с ссылкой на детали товара -->
-                            <h5 class="card-title"><a href="{% url 'product_detail' product.category.slug product.slug %}">{{ product.name }}</a></h5>
+                  <div class="col-lg-6">
+                      <div class="card-body">
+                          <!-- Название товара с ссылкой на детали товара -->
+                          <h5 class="card-title"><a href="{% url 'product_detail' product.category.slug product.slug %}">{{ product.name }}</a></h5>
+                          <!-- Характеристики и краткое описание -->
+                          <div class="card-text">
+                              <h5>Характеристики:</h5>
+                              <ul>
+                                  {% for key, value in product.properties.items %}
+                                      <li><strong>{{ key }}:</strong> {{ value }}</li>
+                                  {% endfor %}
+                              </ul>
+                              <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                          </div>
+                      </div>
+                  </div>
 
-                            <!-- Характеристики и краткое описание -->
-                            <div class="card-text">
-                                <p>Характеристики:</p>
-                                <ul>
-                                    {% for key, value in product.properties.items %}
-                                        <li><strong>{{ key }}:</strong> {{ value }}</li>
-                                    {% endfor %}
-                                </ul>
-                                <p>Описание: {{ product.description|truncatewords:20 }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Цена и кнопка "В корзину" -->
-                    <div class="card-footer">
-                        <p class="card-text">Цена: {{ product.price }} руб.</p>
-                        <a href="#" class="btn btn-primary">В корзину</a>
-                    </div>
-                </div>
+                  <div class="col-lg-2 py-3">
+                      <p class="card-text">Цена: {{ product.price }} руб.</p>
+                      <a href="#" class="btn btn-primary">В корзину</a>
+                  </div>
+              </div>
             </div>
         {% endfor %}
     </div>

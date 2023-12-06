@@ -1,3 +1,13 @@
 .carousel-indicators {
-    bottom: -35px;
+  bottom: -35px;
+}
+
+.prod-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-title>a {
+  text-decoration: none;
 }
