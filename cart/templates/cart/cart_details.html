@@ -1,0 +1,34 @@
+{% extends 'products/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Корзина</h2>
+
+    {% for cart_item in cart_items %}
+      <div class="card mb-3">
+        <div class="row">
+          <div class="card-body col-lg-1 cart-image">
+            {% with image=cart_item.product.image_paths.0 %}
+              {% if image %}
+                  <a href="{% url 'product_detail' cart_item.product.category.slug cart_item.product.slug %}">
+                      <img src="/media/{{ image }}" class="card-img-top w-100" alt="{{ product.name }}">
+                  </a>
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div class="card-body col-lg-9 p-4">
+            <h5 class="card-title"><a href="{% url 'product_detail' cart_item.product.category.slug cart_item.product.slug %}">{{ cart_item.product.name }}</a></h5>
+            <p class="card-text mt-3"><strong>Количество:</strong> {{ cart_item.quantity }}</p>
+            <p class="card-text">
+              <strong>Стоимость:</strong> {{ cart_item.total }} руб.
+              {% if cart_item.quantity > 1 %}
+                (цена за единицу: {{ cart_item.product.price }} руб.)
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    <h4><strong>Общая сумма:</strong> {{ total_price }} руб.</h4>
+  </div>
+{% endblock %}

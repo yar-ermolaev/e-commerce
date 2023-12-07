@@ -38,7 +38,10 @@
 
                   <div class="col-lg-2 py-3">
                       <p class="card-text">Цена: {{ product.price }} руб.</p>
-                      <a href="#" class="btn btn-primary">В корзину</a>
+                          <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">В корзину</button>
+                          </form>
                   </div>
               </div>
             </div>
