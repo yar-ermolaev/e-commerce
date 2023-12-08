@@ -1,4 +1,4 @@
-from django.db.models import F, fields, ExpressionWrapper, Sum
+from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView

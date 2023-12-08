@@ -3,7 +3,6 @@
 {% block content %}
   <div class="container mt-5">
     <h2 class="mb-4">Корзина</h2>
-
     {% for cart_item in cart_items %}
       <div class="card mb-3">
         <div class="row">
@@ -29,6 +28,10 @@
         </div>
       </div>
     {% endfor %}
-    <h4><strong>Общая сумма:</strong> {{ total_price }} руб.</h4>
+    {% if not cart_items %}
+      <h5>Товары не добавлены в корзину.</h5>
+    {% else %}
+      <h4><strong>Общая сумма:</strong> {{ total_price }} руб.</h4>
+    {% endif %}
   </div>
 {% endblock %}
