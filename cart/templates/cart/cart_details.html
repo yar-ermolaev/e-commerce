@@ -6,7 +6,7 @@
     {% for cart_item in cart_items %}
       <div class="card mb-3">
         <div class="row">
-          <div class="card-body col-lg-1 cart-image">
+          <div class="card-body col-lg-2 cart-image">
             {% with image=cart_item.product.image_paths.0 %}
               {% if image %}
                   <a href="{% url 'product_detail' cart_item.product.category.slug cart_item.product.slug %}">
@@ -15,7 +15,7 @@
               {% endif %}
             {% endwith %}
           </div>
-          <div class="card-body col-lg-9 p-4">
+          <div class="card-body col-lg-8 p-4">
             <h5 class="card-title"><a href="{% url 'product_detail' cart_item.product.category.slug cart_item.product.slug %}">{{ cart_item.product.name }}</a></h5>
             <p class="card-text mt-3"><strong>Количество:</strong> {{ cart_item.quantity }}</p>
             <p class="card-text">
@@ -24,6 +24,12 @@
                 (цена за единицу: {{ cart_item.product.price }} руб.)
               {% endif %}
             </p>
+          </div>
+          <div class="card-body col-lg-2">
+            <form method="post" action="{% url 'cart:delete_cart_item' cart_item.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Удалить</button>
+            </form>
           </div>
         </div>
       </div>

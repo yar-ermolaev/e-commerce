@@ -13,7 +13,6 @@ class AddToCartView(View):
     def post(self, request, product_id, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_id)
         cart, created = Cart.objects.get_or_create(user=request.user)
-
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart, product=product)
         if not created:
@@ -38,3 +37,17 @@ class ShowCart(ListView):
         total_price = self.get_queryset().aggregate(total_price=Sum('total'))['total_price']
         context['total_price'] = total_price
         return context
+
+
+class DeleteFromCartView(View):
+    template_name = 'cart/cart_details.html'
+
+    def post(self, request, item_pk, *args, **kwargs):
+        cart_item = get_object_or_404(CartItem, pk=item_pk)
+        cart_item.quantity -= 1
+        if cart_item.quantity <= 0:
+            cart_item.delete()
+        else:
+            cart_item.save()
+
+        return redirect('cart:cart_details')
