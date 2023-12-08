@@ -52,3 +52,10 @@ class DeleteFromCartView(View):
             cart_item.save()
 
         return redirect('cart:cart_details')
+
+
+def clear_cart(request):
+    cart = get_object_or_404(Cart, user=request.user)
+    CartItem.objects.filter(cart=cart).delete()
+    return redirect('cart:cart_details')
+

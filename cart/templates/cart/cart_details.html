@@ -38,6 +38,10 @@
       <h5>Товары не добавлены в корзину.</h5>
     {% else %}
       <h4><strong>Общая сумма:</strong> {{ total_price }} руб.</h4>
+
+      <a href="{% url 'cart:clear_cart' %}" class="btn btn-danger mt-2">
+        Очистить корзину
+      </a>
     {% endif %}
   </div>
 {% endblock %}
