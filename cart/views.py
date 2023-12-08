@@ -1,4 +1,5 @@
 from django.db.models import F, Sum
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView
@@ -19,7 +20,7 @@ class AddToCartView(View):
             cart_item.quantity += 1
             cart_item.save()
 
-        return redirect('category_detail', product.category.slug)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class ShowCart(ListView):
