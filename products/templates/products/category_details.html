@@ -31,7 +31,9 @@
                                       <li><strong>{{ key }}:</strong> {{ value }}</li>
                                   {% endfor %}
                               </ul>
-                              <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                              {% if product.description %}
+                                <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                              {% endif %}
                           </div>
                       </div>
                   </div>
