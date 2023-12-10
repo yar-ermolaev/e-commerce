@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Категория - {{ products.0.category.name }}</h1>
+    <h1>{{ products.0.category.name }}</h1>
 
     <!-- Список 10 товаров в категории -->
     <div class="row">
@@ -12,7 +12,7 @@
                   <div class="col-lg-4 prod-image">
                       {% with image=product.image_paths.0 %}
                           {% if image %}
-                              <a href="{% url 'product_detail' product.category.slug product.slug %}">
+                              <a href="{{ product.get_absolute_url }}">
                                   <img src="/media/{{ image }}" class="card-img-top w-80" alt="{{ product.name }}">
                               </a>
                           {% endif %}
@@ -22,7 +22,7 @@
                   <div class="col-lg-6">
                       <div class="card-body">
                           <!-- Название товара с ссылкой на детали товара -->
-                          <h5 class="card-title"><a href="{% url 'product_detail' product.category.slug product.slug %}">{{ product.name }}</a></h5>
+                          <h5 class="card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
                           <!-- Характеристики и краткое описание -->
                           <div class="card-text">
                               <h5>Характеристики:</h5>
