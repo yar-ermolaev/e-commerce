@@ -9,14 +9,16 @@
           <div class="card-body col-lg-2 cart-image">
             {% with image=cart_item.product.image_paths.0 %}
               {% if image %}
-                  <a href="{% url 'product_detail' cart_item.product.category.slug cart_item.product.slug %}">
+                  <a href="{{ cart_item.product.get_absolute_url }}">
                       <img src="/media/{{ image }}" class="card-img-top w-100" alt="{{ product.name }}">
                   </a>
               {% endif %}
             {% endwith %}
           </div>
           <div class="card-body col-lg-8 p-4">
-            <h5 class="card-title"><a href="{% url 'product_detail' cart_item.product.category.slug cart_item.product.slug %}">{{ cart_item.product.name }}</a></h5>
+            <h5 class="card-title"><a href="{{ cart_item.product.get_absolute_url }}">
+              {{ cart_item.product.name }}</a>
+            </h5>
             <p class="card-text mt-3"><strong>Количество:</strong> {{ cart_item.quantity }}</p>
             <p class="card-text">
               <strong>Стоимость:</strong> {{ cart_item.total }} руб.
