@@ -29,7 +29,7 @@ class ShowCart(ListView):
 
     def get_queryset(self):
         cart, created = Cart.objects.get_or_create(user=self.request.user)
-        return CartItem.objects.filter(cart=cart).annotate(
+        return cart.items.annotate(
             total=F('quantity') * F('product__price')
         )
 
@@ -56,6 +56,5 @@ class DeleteFromCartView(View):
 
 def clear_cart(request):
     cart = get_object_or_404(Cart, user=request.user)
-    CartItem.objects.filter(cart=cart).delete()
+    cart.items.all().delete()
     return redirect('cart:cart_details')
-
