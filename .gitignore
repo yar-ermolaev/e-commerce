@@ -5,3 +5,6 @@ __pycache__/
 
 .idea/
 notes.md
+
+media/
+db.sqlite3
