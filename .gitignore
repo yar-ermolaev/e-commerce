@@ -8,3 +8,5 @@ notes.md
 
 media/
 db.sqlite3
+
+.env
