@@ -11,7 +11,8 @@ from .models import CartItem, Cart
 class AddToCartView(View):
     template_name = 'products/show_product.html'
 
-    def post(self, request, product_id, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        product_id = request.POST.get('product_id')
         product = get_object_or_404(Product, pk=product_id)
         cart, created = Cart.objects.get_or_create(user=request.user)
         cart_item, created = CartItem.objects.get_or_create(

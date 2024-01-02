@@ -40,8 +40,9 @@
 
                   <div class="col-lg-2 py-3">
                       <p class="card-text">Цена: {{ product.price }} руб.</p>
-                          <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+                          <form method="post" action="{% url 'cart:add' %}">
                             {% csrf_token %}
+                            <input type="hidden" id="productId" name="product_id" value="{{ product.id }}">
                             <button type="submit" class="btn btn-primary">В корзину</button>
                           </form>
                   </div>
