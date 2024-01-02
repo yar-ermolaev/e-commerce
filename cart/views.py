@@ -5,7 +5,8 @@ from django.views import View
 from django.views.generic import ListView
 
 from products.models import Product
-from .models import CartItem, Cart
+from .models import CartItem
+from .utils import get_or_create_cart
 
 
 class AddToCartView(View):
@@ -14,7 +15,7 @@ class AddToCartView(View):
     def post(self, request, *args, **kwargs):
         product_id = request.POST.get('product_id')
         product = get_object_or_404(Product, pk=product_id)
-        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart = get_or_create_cart(request)
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart, product=product)
         if not created:
@@ -29,7 +30,7 @@ class ShowCart(ListView):
     context_object_name = 'cart_items'
 
     def get_queryset(self):
-        cart, created = Cart.objects.get_or_create(user=self.request.user)
+        cart = get_or_create_cart(self.request)
         return cart.items.annotate(
             total=F('quantity') * F('product__price')
         )
@@ -56,6 +57,6 @@ class DeleteFromCartView(View):
 
 
 def clear_cart(request):
-    cart = get_object_or_404(Cart, user=request.user)
+    cart = get_or_create_cart(request)
     cart.items.all().delete()
     return redirect('cart:cart_details')

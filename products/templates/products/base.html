@@ -32,10 +32,10 @@
                   {% endfor %}
                 </ul>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'cart:cart_details' %}">Корзина</a>
+              </li>
               {% if user.is_authenticated %}
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'cart:cart_details' %}">Корзина</a>
-                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
                 </li>
