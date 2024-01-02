@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True,
                                 related_name='cart')
     products = models.ManyToManyField('products.Product', through='CartItem')
     session_key = models.CharField(max_length=32, null=True, blank=True)
