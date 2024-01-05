@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, reverse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
+
+from cart.models import Cart
 from . import forms
 from .models import EmailVerification
 
@@ -22,6 +24,13 @@ class RegistrationView(CreateView):
     form_class = forms.RegistrationForm
     success_url = reverse_lazy('users:verify-email')
     extra_context = {'title': 'Регистрация'}
+
+    def form_valid(self, form):
+        session_key = self.request.session.session_key
+        response = super().form_valid(form)
+        if session_key:
+            Cart.objects.filter(session_key=session_key).update(user=self.object)
+        return response
 
 
 class ProfileView(UpdateView):
