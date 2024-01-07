@@ -1,11 +1,8 @@
-from datetime import timedelta
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django import forms
-from django.utils.timezone import now
 
-from .models import EmailVerification
+from .utils import create_and_send_verification
 
 
 class LoginForm(AuthenticationForm):
@@ -24,9 +21,7 @@ class RegistrationForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_active = False
         user.save()
-        expiration = now() + timedelta(days=2)
-        record = EmailVerification.objects.create(user=user, expiration=expiration)
-        record.send_verification_email()
+        create_and_send_verification(user)
         return user
 
 

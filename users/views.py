@@ -1,16 +1,14 @@
-from datetime import timedelta
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, reverse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
-from django.utils.timezone import now
 
 from cart.models import Cart
 from . import forms
 from .models import EmailVerification
+from .utils import create_and_send_verification
 
 
 class LoginUser(LoginView):
@@ -61,7 +59,5 @@ class EmailVerificationView(TemplateView):
                 return super().get(request, *args, **kwargs)
             else:
                 email_verifications.delete()
-                expiration = now() + timedelta(days=2)
-                record = EmailVerification.objects.create(user=user, expiration=expiration)
-                record.send_verification_email()
+                create_and_send_verification(user)
         return HttpResponseRedirect(reverse('users:expired'))
