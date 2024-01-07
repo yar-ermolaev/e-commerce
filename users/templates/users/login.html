@@ -1,4 +1,5 @@
 {% extends 'products/base.html' %}
+{% load static socialaccount %}
 
 {% block content %}
 <div class="row">
@@ -26,6 +27,11 @@
                    name="password">
           </div>
           <button type="submit" class="btn btn-primary">Войти</button>
+          <div class="form-group d-flex align-items-center justify-content-between mt-4">
+            <a href="{% provider_login_url 'github' %}">
+              <img src="{% static 'users/icons/github-mark.svg' %}" class="card-img-top w-50" alt="GitHub">
+            </a>
+          </div>
         </form>
       </div>
     </div>
