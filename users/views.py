@@ -1,9 +1,12 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, reverse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, TemplateView
+from django.utils.timezone import now
 
 from cart.models import Cart
 from . import forms
@@ -50,10 +53,15 @@ class EmailVerificationView(TemplateView):
         code = kwargs['code']
         user = get_object_or_404(get_user_model(), email=kwargs['email'])
         email_verifications = EmailVerification.objects.filter(user=user, code=code)
-        if email_verifications.exists() and not email_verifications.first().is_expired():
-            user.is_verified_email = True
-            user.is_active = True
-            user.save()
-            return super().get(request, *args, **kwargs)
-        else:
-            return HttpResponseRedirect(reverse('index'))
+        if email_verifications.exists():
+            if not email_verifications.first().is_expired():
+                user.is_verified_email = True
+                user.is_active = True
+                user.save()
+                return super().get(request, *args, **kwargs)
+            else:
+                email_verifications.delete()
+                expiration = now() + timedelta(days=2)
+                record = EmailVerification.objects.create(user=user, expiration=expiration)
+                record.send_verification_email()
+        return HttpResponseRedirect(reverse('users:expired'))

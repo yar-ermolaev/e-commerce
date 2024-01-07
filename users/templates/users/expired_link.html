@@ -1,0 +1,27 @@
+{% extends 'products/base.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+          <div class="card-header">
+            <h3 class="text-center font-weight-light my-4">Подтвердите email</h3>
+          </div>
+          <div class="card-body">
+            <h4>
+              <p>Если вы регистрировались ранее, то ваша ссылка подтверждения учетной записи устарела. На вашу почту отправлено новое письмо.</p>
+              <p>Для завершения регистрации и активации профиля необходимо перейти по ссылке в письме.</p>
+              <p>Ссылка действует в течение 2 суток.</p>
+              <p>
+                Если вы ввели неверную почту или не регистрировались ранее, то необходимо <a
+                      href="{% url 'users:registration' %}">
+                зарегистрироваться</a>.
+              </p>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

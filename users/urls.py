@@ -15,4 +15,6 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('verify/<str:email>/<uuid:code>/', views.EmailVerificationView.as_view(),
          name='email_verification'),
+    path('expired-link/', TemplateView.as_view(
+        template_name='users/expired_link.html'), name='expired'),
 ]
