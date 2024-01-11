@@ -1,11 +1,12 @@
 import uuid
 
-from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse_lazy
 from django.conf import settings
 from django.utils.timezone import now
+
+from . import tasks
 
 
 class User(AbstractUser):
@@ -31,13 +32,6 @@ class EmailVerification(models.Model):
         verification_link = settings.DOMAIN_NAME + link
         message = (f"Для подтверждения учетной записи для пользователя {self.user.username}"
                    f" на сайте VoltTech перейдите по ссылке: {verification_link}")
-        send_mail(
-            subject='Подтверждение учетной записи',
-            message=message,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[self.user.email],
-            fail_silently=False
+        tasks.send_verification_email_task.delay(
+            message, settings.EMAIL_HOST_USER, [self.user.email]
         )
-
-
-
