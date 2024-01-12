@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  django:
+    build: .
+    volumes:
+      - ./media:/app/media
+    restart: always
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+#    command: bash entrypoint.sh
+    entrypoint: ./entrypoint.sh
+  db:
+    image: postgres
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    restart: always
+
+  worker:
+    build: .
+    restart: unless-stopped
+    entrypoint: ./worker-entrypoint.sh
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - django
+      - redis
+
+volumes:
+  db_data:
