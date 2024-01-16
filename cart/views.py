@@ -47,12 +47,7 @@ class DeleteFromCartView(View):
 
     def post(self, request, item_pk, *args, **kwargs):
         cart_item = get_object_or_404(CartItem, pk=item_pk)
-        cart_item.quantity -= 1
-        if cart_item.quantity <= 0:
-            cart_item.delete()
-        else:
-            cart_item.save()
-
+        cart_item.delete()
         return redirect('cart:cart_details')
 
 
@@ -60,3 +55,12 @@ def clear_cart(request):
     cart = get_or_create_cart(request)
     cart.items.all().delete()
     return redirect('cart:cart_details')
+
+
+def change_quantity(request, item_pk):
+    cart_item = get_object_or_404(CartItem, pk=item_pk)
+    quantity = int(request.POST.get('quantity'))
+    if cart_item.quantity != quantity:
+        cart_item.quantity = quantity
+        cart_item.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

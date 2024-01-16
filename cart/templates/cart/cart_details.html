@@ -19,7 +19,18 @@
             <h5 class="card-title"><a href="{{ cart_item.product.get_absolute_url }}">
               {{ cart_item.product.name }}</a>
             </h5>
-            <p class="card-text mt-3"><strong>Количество:</strong> {{ cart_item.quantity }}</p>
+            <div class="card-text mt-3 mb-1">
+              <form method="post" action="{% url 'cart:change_quantity' cart_item.pk %}">
+                {% csrf_token %}
+                <label for="quantity" class="align-middle"><strong>Количество:</strong></label>
+                <input class="col-lg-1 align-middle" type="number" id="quantity"
+                       name="quantity" min="1" max="{{ cart_item.product.in_stock }}"
+                       value="{{ cart_item.quantity }}">
+                <button type="submit" class="btn btn-secondary col-lg-2">
+                  Изменить
+                </button>
+              </form>
+            </div>
             <p class="card-text">
               <strong>Стоимость:</strong> {{ cart_item.total }} руб.
               {% if cart_item.quantity > 1 %}
