@@ -17,7 +17,7 @@
     {% for product in products %}
     <div class="card mb-4 p-2">
       <div class="row">
-        <div class="col-lg-4 prod-image">
+        <div class="col-lg-4 d-flex align-items-center justify-content-center">
           {% with image=product.image_paths.0 %}
           {% if image %}
           <a href="{{ product.get_absolute_url }}">
@@ -48,11 +48,28 @@
 
         <div class="col-lg-2 py-3">
           <p class="card-text">Цена: {{ product.price }} руб.</p>
+          {% if product not in cart.products.all %}
           <form method="post" action="{% url 'cart:add' %}">
             {% csrf_token %}
             <input type="hidden" id="productId" name="product_id" value="{{ product.id }}">
             <button type="submit" class="btn btn-primary">В корзину</button>
           </form>
+          {% else %}
+            {% for item in cart.items.all %}
+              {% if item.product == product %}
+                <form method="post" action="{% url 'cart:change_quantity' item.pk %}">
+                  {% csrf_token %}
+                  <label for="quantity" class="align-middle"><strong>В корзине:</strong></label>
+                  <input class="align-middle mt-1" type="number" id="quantity"
+                         name="quantity" min="1" max="{{ item.product.in_stock }}"
+                         value="{{ item.quantity }}">
+                  <button type="submit" class="btn btn-secondary mt-1">
+                    Изменить
+                  </button>
+                </form>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
         </div>
       </div>
     </div>

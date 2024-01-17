@@ -39,11 +39,28 @@
         <p>{{ product.manufacturer }}</p>
       </div>
       <div class="col-lg-6 col-md-6 mt-2">
+        {% if product not in cart.products.all %}
         <form method="post" action="{% url 'cart:add' %}">
           {% csrf_token %}
           <input type="hidden" id="productId" name="product_id" value="{{ product.id }}">
           <button type="submit" class="btn btn-primary btn-lg">Добавить в корзину</button>
         </form>
+        {% else %}
+          {% for item in cart.items.all %}
+            {% if item.product == product %}
+              <form method="post" action="{% url 'cart:change_quantity' item.pk %}">
+                {% csrf_token %}
+                <label for="quantity"><strong>В корзине:</strong></label>
+                <input class="col-lg-2 align-middle" type="number" id="quantity"
+                       name="quantity" min="1" max="{{ item.product.in_stock }}"
+                       value="{{ item.quantity }}">
+                <button type="submit" class="btn btn-secondary col-lg-3">
+                  Изменить
+                </button>
+              </form>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
 
         <h4 class="mt-2">Количество на складе</h4>
         <p>{{ product.in_stock }}</p>
