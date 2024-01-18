@@ -1,4 +1,5 @@
 {% extends 'products/base.html' %}
+{% load product_tags %}
 
 {% block content %}
 {% if not products %}
@@ -81,7 +82,8 @@
   <ul class="pagination justify-content-center">
     {% if page_obj.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+        <a class="page-link" aria-label="Previous"
+           href="?{% merge_params page=page_obj.previous_page_number %}">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
@@ -94,13 +96,14 @@
         <li class="page-item active" aria-current="page"><span class="page-link">{{ page }}</span></li>
       {% elif page >= page_obj.number|add:-4 and page <= page_obj.number|add:4 %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+            <a class="page-link" href="?{% merge_params page=page %}">{{ page }}</a>
         </li>
       {% endif %}
     {% endfor %}
     {% if page_obj.has_next %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+        <a class="page-link" aria-label="Next"
+           href="?{% merge_params page=page_obj.next_page_number %}">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
