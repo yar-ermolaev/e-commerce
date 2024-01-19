@@ -1,5 +1,9 @@
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.views.generic import DetailView, ListView
+
+from django_filters.views import FilterView
+
+from .filters import ProductFilter
 from .models import Product
 
 
@@ -29,3 +33,14 @@ class SearchProducts(ListView):
         query = SearchQuery(query)
         return Product.objects.annotate(
             rank=SearchRank(vector, query)).filter(rank__gt=0).order_by('-rank')
+
+
+class FilterProduct(FilterView):
+    model = Product
+    filterset_class = ProductFilter
+    template_name = 'products/product_list.html'
+    paginate_by = 10
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        return Product.objects.filter(category__slug=self.kwargs.get('slug'))

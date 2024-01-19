@@ -2,116 +2,133 @@
 {% load product_tags %}
 
 {% block content %}
-{% if not products %}
-<div class="container mt-5">
-  <h1>Товаров не найдено</h1>
-</div>
-{% else %}
-<div class="container mt-5">
-  {% if request.GET.q %}
-  <h1>Результаты поиска "{{ request.GET.q }}"</h1>
-  {% else %}
-  <h1>{{ products.0.category.name }}</h1>
-  {% endif %}
-
-  <div class="row">
-    {% for product in products %}
-    <div class="card mb-4 p-2">
-      <div class="row">
-        <div class="col-lg-4 d-flex align-items-center justify-content-center">
-          {% with image=product.image_paths.0 %}
-          {% if image %}
-          <a href="{{ product.get_absolute_url }}">
-            <img src="/media/{{ image }}" class="card-img-top w-80" alt="{{ product.name }}">
-          </a>
-          {% endif %}
-          {% endwith %}
+{% if products %}
+  <form method="get">
+    <div style="display: grid">
+      {% for field in filter.form %}
+        <div id="form-field-{{ forloop.counter0 }}" class="mt-4">
+          {{ field.label_tag }}
+          {{ field }}
         </div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-dark mb-3 mt-3">Применить</button>
+    <a class="text-dark text-sm mb-1"
+       href="{{ request.path }}">Сбросить фильтры</a>
+  </form>
+{% endif %}
+{% if not products %}
+  <div class="container mt-5">
+    <h1>Товаров не найдено</h1>
+  </div>
+{% else %}
+  <div class="container mt-5">
+    {% if request.GET.q %}
+    <h1>Результаты поиска "{{ request.GET.q }}"</h1>
+    {% else %}
+    <h1>{{ products.0.category.name }}</h1>
+    {% endif %}
 
-        <div class="col-lg-6">
-          <div class="card-body">
-            <!-- Название товара с ссылкой на детали товара -->
-            <h5 class="card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
-            <!-- Характеристики и краткое описание -->
-            <div class="card-text">
-              <h5>Характеристики:</h5>
-              <ul>
-                {% for key, value in product.properties.items %}
-                <li><strong>{{ key }}:</strong> {{ value }}</li>
-                {% endfor %}
-              </ul>
-              {% if product.description %}
-              <p>Описание: {{ product.description|truncatewords:20 }}</p>
-              {% endif %}
+    <div class="row">
+      {% for product in products %}
+      <div class="card mb-4 p-2">
+        <div class="row">
+          <div class="col-lg-4 d-flex align-items-center justify-content-center">
+            {% with image=product.image_paths.0 %}
+            {% if image %}
+            <a href="{{ product.get_absolute_url }}">
+              <img src="/media/{{ image }}" class="card-img-top w-80" alt="{{ product.name }}">
+            </a>
+            {% endif %}
+            {% endwith %}
+          </div>
+
+          <div class="col-lg-6">
+            <div class="card-body">
+              <!-- Название товара с ссылкой на детали товара -->
+              <h5 class="card-title"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h5>
+              <!-- Характеристики и краткое описание -->
+              <div class="card-text">
+                <h5>Характеристики:</h5>
+                <ul>
+                  {% for key, value in product.properties.items %}
+                  <li><strong>{{ key }}:</strong> {{ value }}</li>
+                  {% endfor %}
+                </ul>
+                {% if product.description %}
+                <p>Описание: {{ product.description|truncatewords:20 }}</p>
+                {% endif %}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-lg-2 py-3">
-          <p class="card-text">Цена: {{ product.price }} руб.</p>
-          {% if product not in cart.products.all %}
-          <form method="post" action="{% url 'cart:add' %}">
-            {% csrf_token %}
-            <input type="hidden" id="productId" name="product_id" value="{{ product.id }}">
-            <button type="submit" class="btn btn-primary">В корзину</button>
-          </form>
-          {% else %}
-            {% for item in cart.items.all %}
-              {% if item.product == product %}
-                <form method="post" action="{% url 'cart:change_quantity' item.pk %}">
-                  {% csrf_token %}
-                  <label for="quantity" class="align-middle"><strong>В корзине:</strong></label>
-                  <input class="align-middle mt-1" type="number" id="quantity"
-                         name="quantity" min="1" max="{{ item.product.in_stock }}"
-                         value="{{ item.quantity }}">
-                  <button type="submit" class="btn btn-secondary mt-1">
-                    Изменить
-                  </button>
-                </form>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
+          <div class="col-lg-2 py-3">
+            <p class="card-text">Цена: {{ product.price }} руб.</p>
+            {% if product not in cart.products.all %}
+            <form method="post" action="{% url 'cart:add' %}">
+              {% csrf_token %}
+              <input type="hidden" id="productId" name="product_id" value="{{ product.id }}">
+              <button type="submit" class="btn btn-primary">В корзину</button>
+            </form>
+            {% else %}
+              {% for item in cart.items.all %}
+                {% if item.product == product %}
+                  <form method="post" action="{% url 'cart:change_quantity' item.pk %}">
+                    {% csrf_token %}
+                    <label for="quantity" class="align-middle"><strong>В корзине:</strong></label>
+                    <input class="align-middle mt-1" type="number" id="quantity"
+                           name="quantity" min="1" max="{{ item.product.in_stock }}"
+                           value="{{ item.quantity }}">
+                    <button type="submit" class="btn btn-secondary mt-1">
+                      Изменить
+                    </button>
+                  </form>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-    </div>
-</div>
+  </div>
 
-<nav aria-label="paginator">
-  <ul class="pagination justify-content-center">
-    {% if page_obj.has_previous %}
-      <li class="page-item">
-        <a class="page-link" aria-label="Previous"
-           href="?{% merge_params page=page_obj.previous_page_number %}">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
-    {% endif %}
-
-    {% for page in paginator.page_range %}
-      {% if page_obj.number == page %}
-        <li class="page-item active" aria-current="page"><span class="page-link">{{ page }}</span></li>
-      {% elif page >= page_obj.number|add:-4 and page <= page_obj.number|add:4 %}
+  {% if paginator.num_pages > 1 %}
+  <nav aria-label="paginator">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?{% merge_params page=page %}">{{ page }}</a>
+          <a class="page-link" aria-label="Previous"
+             href="?{% merge_params page=page_obj.previous_page_number %}">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
         </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
       {% endif %}
-    {% endfor %}
-    {% if page_obj.has_next %}
-      <li class="page-item">
-        <a class="page-link" aria-label="Next"
-           href="?{% merge_params page=page_obj.next_page_number %}">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
-    {% endif %}
-  </ul>
-</nav>
+
+      {% for page in paginator.page_range %}
+        {% if page_obj.number == page %}
+          <li class="page-item active" aria-current="page"><span class="page-link">{{ page }}</span></li>
+        {% elif page >= page_obj.number|add:-4 and page <= page_obj.number|add:4 %}
+          <li class="page-item">
+              <a class="page-link" href="?{% merge_params page=page %}">{{ page }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" aria-label="Next"
+             href="?{% merge_params page=page_obj.next_page_number %}">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
 {% endif %}
 
 {% endblock %}
