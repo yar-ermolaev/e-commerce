@@ -1,5 +1,4 @@
 from django import template
-from django.utils.http import urlencode
 
 
 register = template.Library()
@@ -7,6 +6,9 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def merge_params(context, **kwargs):
-    query_parameters = context['request'].GET.dict()
+    query_parameters = context['request'].GET.copy()
+    if 'page' in query_parameters and 'page' in kwargs:
+        query_parameters['page'] = kwargs['page']
+        kwargs.pop('page')
     query_parameters.update(kwargs)
-    return urlencode(query_parameters)
+    return query_parameters.urlencode()
